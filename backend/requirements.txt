@@ -1,0 +1,32 @@
+# FastAPI Core
+fastapi>=0.115.0
+uvicorn[standard]>=0.30.0
+python-multipart>=0.0.9
+
+# Database
+sqlalchemy>=2.0.0
+aiosqlite>=0.20.0
+alembic>=1.13.0
+
+# Auth
+python-jose[cryptography]>=3.3.0
+passlib[bcrypt]>=1.7.4
+bcrypt>=4.0.0
+
+# HTTP & APIs
+requests>=2.31.0
+httpx>=0.27.0
+
+# Environment
+python-dotenv>=1.0.0
+
+# AI / OCR
+openai>=1.30.0
+
+# File handling
+openpyxl>=3.1.2
+
+# Utils
+pydantic>=2.0.0
+pydantic-settings>=2.0.0
+PyJWT>=2.8.0

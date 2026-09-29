@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: taxflow_db
+    environment:
+      POSTGRES_DB: taxflow_db
+      POSTGRES_USER: taxflow_user
+      POSTGRES_PASSWORD: taxflow_secure_password_2026
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U taxflow_user -d taxflow_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: taxflow_backend
+    environment:
+      DEBUG: "False"
+      SECRET_KEY: "prod-secret-key-replace-in-env-file-for-security"
+      DATABASE_URL: postgresql+asyncpg://taxflow_user:taxflow_secure_password_2026@db:5432/taxflow_db
+      PORT: "8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:alpine
+    container_name: taxflow_nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./:/usr/share/nginx/html:ro
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

@@ -1,0 +1,38 @@
+{
+  "cleanUrls": true,
+  "rewrites": [
+    {
+      "source": "/login",
+      "destination": "/login.html"
+    },
+    {
+      "source": "/dashboard",
+      "destination": "/dashboard.html"
+    },
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/index.py"
+    },
+    {
+      "source": "/docs",
+      "destination": "/api/index.py"
+    },
+    {
+      "source": "/openapi.json",
+      "destination": "/api/index.py"
+    },
+    {
+      "source": "/(.*)",
+      "destination": {
+        "type": "service",
+        "service": "taxflow-backend"
+      }
+    }
+  ],
+  "services": {
+    "taxflow-backend": {
+      "root": ".",
+      "buildCommand": "pip install -r backend/requirements.txt"
+    }
+  }
+}

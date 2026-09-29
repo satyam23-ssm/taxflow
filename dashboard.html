@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — TaxFlow AI</title>
+  <meta name="description" content="TaxFlow AI — The AI-Powered Tax Operating System for Indian CA Practices. Your Tax Practice, on Autopilot.">
+  <link rel="stylesheet" href="css/design-system.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect rx='20' width='100' height='100' fill='url(%23g)'/><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop stop-color='%2300d4ff'/><stop offset='1' stop-color='%237c3aed'/></linearGradient></defs><text x='50' y='68' font-size='50' font-weight='900' text-anchor='middle' fill='%23060a14'>T</text></svg>">
+</head>
+<body>
+  <div class="dashboard">
+    <!-- ─── Sidebar ──────────────────────── -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">T</div>
+        <div class="sidebar-brand">TaxFlow <span class="text-gradient" style="font-size: 14px;">AI</span></div>
+      </div>
+      
+      <div class="sidebar-nav">
+        <div class="sidebar-section-label">Main</div>
+        <div class="sidebar-item active" data-tab="overview">
+          <span class="sidebar-item-icon">📊</span> Overview
+        </div>
+        <div class="sidebar-item" data-tab="analytics">
+          <span class="sidebar-item-icon">📈</span> Audit & Analytics
+        </div>
+        <div class="sidebar-item" data-tab="calendar">
+          <span class="sidebar-item-icon">📅</span> Compliance Calendar
+          <span class="sidebar-item-badge" id="calendarBadge" style="background: var(--color-warning);">3 Due</span>
+        </div>
+        
+        <div class="sidebar-section-label">Core Workflows</div>
+        <div class="sidebar-item" data-tab="itc">
+          <span class="sidebar-item-icon">🛡️</span> ITC Reconciliation
+          <span class="sidebar-item-badge" id="itcBadge">2</span>
+        </div>
+        <div class="sidebar-item" data-tab="chaser">
+          <span class="sidebar-item-icon">⚡</span> Vendor Chaser
+          <span class="sidebar-item-badge" id="chaserBadge" style="background: var(--color-warning);">2</span>
+        </div>
+        <div class="sidebar-item" data-tab="whatsapp">
+          <span class="sidebar-item-icon">💬</span> WhatsApp Ingestion
+        </div>
+        <div class="sidebar-item" data-tab="notices">
+          <span class="sidebar-item-icon">⚖️</span> Legal Notices
+          <span class="sidebar-item-badge" id="noticesBadge">1</span>
+        </div>
+        <div class="sidebar-item" data-tab="my-tasks" id="sidebarItemMyTasks">
+          <span class="sidebar-item-icon">📋</span> My Assigned Tasks
+          <span class="sidebar-item-badge" id="myTasksBadge" style="background: var(--color-info, #3b82f6);">3 Due</span>
+        </div>
+        
+        <div class="sidebar-section-label" id="sidebarSectionManagement">Management (Admin)</div>
+        <div class="sidebar-item" data-tab="team" id="sidebarItemTeam">
+          <span class="sidebar-item-icon">👥</span> Team & Employees
+          <span class="sidebar-item-badge" id="teamWorkingBadge" style="background: var(--color-success);">4 Working</span>
+        </div>
+        <div class="sidebar-item" data-tab="clients">
+          <span class="sidebar-item-icon">🏢</span> Clients
+        </div>
+        <div class="sidebar-item" data-tab="settings">
+          <span class="sidebar-item-icon">⚙️</span> Settings
+        </div>
+      </div>
+      
+      <div class="sidebar-footer">
+        <div class="sidebar-user" onclick="handleLogout()" title="Click to log out">
+          <div class="sidebar-avatar" id="userAvatar">RK</div>
+          <div class="sidebar-user-info">
+            <div class="sidebar-user-name" id="sidebarUserName">CA Rajesh Kumar</div>
+            <div class="sidebar-user-role" id="sidebarUserRole">Partner • Admin ⎋</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ─── Main Content ─────────────────── -->
+    <main class="main-content">
+      <!-- Topbar -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <div class="topbar-title" id="topbarTitle">Overview</div>
+          <div class="topbar-breadcrumb hide-mobile">
+            <span class="separator">/</span>
+            <span id="topbarSubtitle">Kumar & Associates</span>
+          </div>
+          <div class="topbar-search" style="position: relative;">
+            <span class="topbar-search-icon">🔍</span>
+            <input type="text" id="globalSearchInput" placeholder="Search clients, GSTIN, invoices, vendors..." autocomplete="off" oninput="handleGlobalSearch(event)">
+            <!-- Global Search Results Dropdown -->
+            <div id="searchResultsDropdown" style="display: none; position: absolute; top: calc(100% + 6px); left: 0; width: 340px; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); box-shadow: 0 15px 35px rgba(0,0,0,0.5); z-index: 200; max-height: 380px; overflow-y: auto;">
+              <!-- Populated dynamically -->
+            </div>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <button class="btn btn-primary btn-sm" onclick="openUploadModal()" style="display: inline-flex; align-items: center; gap: 6px; font-weight: 600;">
+            <span>⚡</span> Gemini OCR Upload
+          </button>
+          <div class="role-session-badge admin" id="sessionRoleBadge" title="Logged in session role">
+            <span class="status-dot working"></span>
+            <span id="sessionRoleText">🛡️ Partner / Admin</span>
+          </div>
+          <button class="btn btn-secondary btn-sm" onclick="handleSwitchUser()" style="font-size: 11px; padding: 5px 10px; display: inline-flex; align-items: center; gap: 4px;" title="Switch user or portal">
+            <span>⎋</span> Switch User
+          </button>
+          <div class="topbar-period" id="topbarPeriod">
+            📅 May/June 2026
+          </div>
+          <button class="topbar-icon-btn" onclick="showLiveActivityModal()" title="Live Activity Trail">
+            🔔
+            <span class="notification-dot"></span>
+          </button>
+          <button class="topbar-icon-btn" id="mobileMenuBtn" onclick="toggleMobileSidebar()">
+            ☰
+          </button>
+        </div>
+      </header>
+
+      <!-- Content Area -->
+      <div class="content-area">
+        
+        <!-- ==========================================
+             TAB: OVERVIEW
+             ========================================== -->
+        <div class="tab-panel active" id="tab-overview">
+          <!-- CA Autopilot Banner with ROI Metrics -->
+          <div class="welcome-banner" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--sp-4);">
+            <div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                <span class="badge badge-success" style="font-size: 11px;">⚡ Practice on Autopilot</span>
+                <span class="text-xs font-mono text-muted">CA + TaxFlow AI &gt; Manual Firm Work</span>
+              </div>
+              <h2>Welcome back, <span id="welcomeUserName">Rajesh</span> 👋</h2>
+              <p>Here's what's happening across your <strong id="welcomeClientsCount">12</strong> connected clients today.</p>
+            </div>
+            <!-- Economic ROI Badges -->
+            <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+              <div style="background: rgba(34,211,238,0.08); border: 1px solid rgba(34,211,238,0.25); border-radius: var(--radius-md); padding: 8px 16px; text-align: right;">
+                <div class="text-xs text-muted font-semibold">FIRM TIME SAVED</div>
+                <div class="font-mono font-bold" id="roiHoursSaved" style="color: var(--accent-cyan); font-size: 18px;">1,284 hrs</div>
+              </div>
+              <div style="background: rgba(52,211,153,0.08); border: 1px solid rgba(52,211,153,0.25); border-radius: var(--radius-md); padding: 8px 16px; text-align: right;">
+                <div class="text-xs text-muted font-semibold">STAFF EQUIVALENT</div>
+                <div class="font-mono font-bold text-success" id="roiStaffEq" style="font-size: 18px;">≈ 3.2 Staff</div>
+              </div>
+              <button class="btn btn-primary btn-sm" onclick="switchTab('itc')">Review Mismatches →</button>
+            </div>
+          </div>
+
+          <div class="metrics-grid">
+            <div class="metric-card" onclick="switchTab('clients')" style="cursor: pointer;">
+              <div class="metric-header">
+                <div class="metric-icon cyan">🏢</div>
+                <div class="metric-trend up" id="clientsTrend">Active</div>
+              </div>
+              <div class="metric-value font-mono" id="metricTotalClients">12</div>
+              <div class="metric-label">Total Clients</div>
+            </div>
+            <div class="metric-card" onclick="switchTab('itc')" style="cursor: pointer;">
+              <div class="metric-header">
+                <div class="metric-icon red">🛡️</div>
+                <div class="metric-trend down">At Risk</div>
+              </div>
+              <div class="metric-value font-mono" id="metricItcRisk" style="color: var(--color-danger)">₹32.9K</div>
+              <div class="metric-label">ITC Discrepancy Risk</div>
+            </div>
+            <div class="metric-card" onclick="switchTab('chaser')" style="cursor: pointer;">
+              <div class="metric-header">
+                <div class="metric-icon yellow">⚡</div>
+                <div class="metric-trend up">Actionable</div>
+              </div>
+              <div class="metric-value font-mono" id="metricActiveChasers" style="color: var(--color-warning)">2</div>
+              <div class="metric-label">Active Vendor Chasers</div>
+            </div>
+            <div class="metric-card" onclick="switchTab('analytics')" style="cursor: pointer;">
+              <div class="metric-header">
+                <div class="metric-icon green">✅</div>
+                <div class="metric-trend up">Recovered</div>
+              </div>
+              <div class="metric-value font-mono" id="metricItcRecovered" style="color: var(--color-success)">₹4.7L</div>
+              <div class="metric-label">ITC Recovered (YTD)</div>
+            </div>
+          </div>
+
+          <div class="dash-grid">
+            <!-- ITC Chart -->
+            <div class="panel">
+              <div class="panel-header">
+                <div>
+                  <div class="panel-title">ITC Recovery & Compliance Trend</div>
+                  <div class="panel-subtitle">Month-on-month Input Tax Credit reconciliation across all practice clients</div>
+                </div>
+                <select class="select" id="overviewChartFilter" style="width: 150px;" onchange="updateOverviewChart(this.value)">
+                  <option value="all">All Clients</option>
+                  <option value="top">Top Clients</option>
+                </select>
+              </div>
+              <div class="panel-body no-pad">
+                <div class="chart-container" id="itcChart">
+                  <!-- Injected by JS -->
+                </div>
+                <div class="chart-legend">
+                  <div class="chart-legend-item">
+                    <span class="chart-legend-dot claimed"></span> Claimed in GSTR-3B
+                  </div>
+                  <div class="chart-legend-item">
+                    <span class="chart-legend-dot recovered"></span> Reconciled / Auto-Chased
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: var(--sp-6);">
+              <!-- Upcoming Deadlines -->
+              <div class="panel flex-1">
+                <div class="panel-header" style="display: flex; justify-content: space-between; align-items: center;">
+                  <div class="panel-title">Statutory Deadlines</div>
+                  <button class="btn btn-secondary btn-sm" onclick="switchTab('calendar')">View Calendar →</button>
+                </div>
+                <div class="panel-body no-pad deadlines-list" id="overviewDeadlinesList">
+                  <!-- Populated by JS -->
+                </div>
+              </div>
+
+              <!-- Live Audit Trail Activity Feed -->
+              <div class="panel flex-1">
+                <div class="panel-header" style="display: flex; justify-content: space-between; align-items: center;">
+                  <div class="panel-title">Live Audit Trail Feed</div>
+                  <span class="badge badge-success" style="font-size: 10px;">🟢 Live Sync</span>
+                </div>
+                <div class="panel-body no-pad activity-feed" id="overviewActivityFeed">
+                  <!-- Populated by JS from AuditLog -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==========================================
+             TAB: ITC RECONCILIATION
+             ========================================== -->
+        <div class="tab-panel" id="tab-itc">
+          <div class="panel">
+            <div class="filters-bar" style="flex-wrap: wrap; gap: 10px;">
+              <select class="select" id="clientFilterSelect" style="width: 240px;">
+                <option value="all">All Clients (12)</option>
+              </select>
+              <select class="select" id="periodFilterSelect" style="width: 140px;">
+                <option value="052026" selected>May 2026</option>
+                <option value="062026">June 2026</option>
+                <option value="042026">April 2026</option>
+              </select>
+              <button class="btn btn-primary btn-sm" id="syncReconcileBtn" onclick="triggerGstr2bSync()">
+                🔄 Sync & Reconcile GSTR-2B
+              </button>
+              <div style="flex: 1;"></div>
+              <div class="filter-chip active" data-filter="ALL" id="filterChipAll">All Invoices</div>
+              <div class="filter-chip" data-filter="MISMATCHED" id="filterChipMismatch" style="color: var(--color-warning); border-color: var(--color-warning-border)">Mismatch</div>
+              <div class="filter-chip" data-filter="MISSING_IN_PORTAL" id="filterChipMissing" style="color: var(--color-danger); border-color: var(--color-danger-border)">Missing in 2B</div>
+              <div class="filter-chip" data-filter="MATCHED" id="filterChipMatched" style="color: var(--color-success); border-color: var(--color-success-border)">Matched</div>
+            </div>
+            
+            <div class="summary-strip">
+              <div class="summary-item">
+                <div class="summary-item-value" id="stripBooksTotal">₹24.5L</div>
+                <div class="summary-item-label">Books ITC (PR)</div>
+              </div>
+              <div class="summary-item">
+                <div class="summary-item-value" id="stripPortalTotal">₹22.1L</div>
+                <div class="summary-item-label">Available in GSTR-2B</div>
+              </div>
+              <div class="summary-item">
+                <div class="summary-item-value highlight" id="stripMatchPct">90%</div>
+                <div class="summary-item-label">Match Percentage</div>
+              </div>
+              <div class="summary-item">
+                <div class="summary-item-value danger" id="stripRiskTotal">₹2.4L</div>
+                <div class="summary-item-label">Total ITC at Risk</div>
+              </div>
+            </div>
+
+            <div class="panel-body no-pad overflow-auto" style="max-height: calc(100vh - 280px);">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Vendor Details</th>
+                    <th>Invoice No.</th>
+                    <th>Date</th>
+                    <th style="text-align: right">Books Value (₹)</th>
+                    <th style="text-align: right">GSTR-2B Value (₹)</th>
+                    <th style="text-align: right">Difference</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="itcTableBody">
+                  <!-- Populated dynamically by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==========================================
+             TAB: VENDOR CHASER
+             ========================================== -->
+        <div class="tab-panel" id="tab-chaser">
+          <div class="welcome-banner" style="background: rgba(0,212,255,0.05); border-color: rgba(0,212,255,0.15)">
+            <div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                <span class="badge badge-warning">⚡ Autonomous Compliance Follow-Up</span>
+              </div>
+              <h2>Vendor Chaser Queue</h2>
+              <p>Automate statutory follow-ups for mismatched or unfiled ITC before the GSTR-3B deadline.</p>
+            </div>
+            <div class="welcome-banner-actions">
+              <button class="btn btn-primary" onclick="triggerBulkChase()">🚀 Dispatch All Selected</button>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="bulk-actions" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--border-color);">
+              <div class="checkbox" id="chaserSelectAllBox" onclick="toggleSelectAllChasers()"></div>
+              <span class="count" id="chaserSelectedCount">0 Selected</span>
+              <button class="btn btn-secondary btn-sm" onclick="triggerBulkChase('whatsapp')">💬 Send WhatsApp Chasers</button>
+              <button class="btn btn-secondary btn-sm" onclick="triggerBulkChase('email')">✉️ Send Email Reminders</button>
+              <div style="flex:1"></div>
+              <select class="select" id="chaserStatusFilter" style="width: 170px; padding: 4px 8px; font-size: 12px;" onchange="filterChaserTable(this.value)">
+                <option value="all">All Discrepancies</option>
+                <option value="pending">Pending Follow-up</option>
+                <option value="sent">Dispatched Chasers</option>
+                <option value="resolved">Resolved / Recovered</option>
+              </select>
+            </div>
+            <div class="panel-body no-pad overflow-auto">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th style="width: 40px"></th>
+                    <th>Vendor Name</th>
+                    <th>Client</th>
+                    <th>Invoice No.</th>
+                    <th style="text-align: right">ITC At Risk (₹)</th>
+                    <th>Discrepancy Reason</th>
+                    <th>Chase Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="chaserTableBody">
+                  <!-- Populated by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==========================================
+             TAB: WHATSAPP INGESTION
+             ========================================== -->
+        <div class="tab-panel" id="tab-whatsapp">
+          <div class="whatsapp-layout">
+            <!-- Inbox List -->
+            <div class="wa-inbox">
+              <div class="wa-inbox-header">
+                <input type="text" class="wa-inbox-search" id="waSearchInput" placeholder="Search client chats..." oninput="filterWhatsAppInbox(this.value)">
+              </div>
+              <div class="wa-inbox-list" id="waInboxList">
+                <!-- Populated by JS -->
+              </div>
+              <div style="padding: 12px; border-top: 1px solid var(--border-color); text-align: center;">
+                <button class="btn btn-secondary btn-sm w-full" onclick="simulateWhatsAppInbound()">
+                  + Simulate Client Inbound Invoice
+                </button>
+              </div>
+            </div>
+
+            <!-- Chat Thread -->
+            <div class="wa-chat">
+              <div class="wa-chat-header" id="waActiveHeader">
+                <div class="wa-contact-avatar" id="waActiveAvatar">ZT</div>
+                <div>
+                  <div class="font-semibold text-sm" id="waActiveName">Zenith Technologies</div>
+                  <div class="text-xs text-muted" id="waActivePhone">Client • +91 98765 43210</div>
+                </div>
+              </div>
+              <div class="wa-chat-body" id="waChatBody">
+                <!-- Messages populated by JS -->
+              </div>
+            </div>
+
+            <!-- Extraction Panel -->
+            <div class="wa-extract">
+              <div class="wa-extract-header">
+                <div class="font-semibold">Google Gemini AI Extraction</div>
+                <div class="text-xs text-muted" id="waExtractSubtitle">From: Inbound Document</div>
+              </div>
+              <div class="wa-extract-body" id="waExtractBody">
+                <!-- Populated by JS -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==========================================
+             TAB: LEGAL NOTICES
+             ========================================== -->
+        <div class="tab-panel" id="tab-notices">
+          <div class="dash-grid" style="grid-template-columns: 350px 1fr; height: calc(100vh - 120px)">
+            <!-- Notice List -->
+            <div class="panel flex-col h-full">
+              <div class="panel-header" style="display: flex; justify-content: space-between; align-items: center;">
+                <div class="panel-title">Active Notices</div>
+                <button class="btn btn-primary btn-sm" onclick="openCreateNoticeModal()">+ New Notice</button>
+              </div>
+              <div class="panel-body no-pad overflow-auto notice-list" id="noticeList">
+                <!-- Populated by JS -->
+              </div>
+            </div>
+
+            <!-- Notice Detail & Response Builder -->
+            <div class="panel flex-col h-full overflow-auto">
+              <div class="notice-detail" id="noticeDetail">
+                <!-- Populated by JS -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==========================================
+             TAB: CLIENTS
+             ========================================== -->
+        <div class="tab-panel" id="tab-clients">
+          <div class="panel-header" style="background: var(--glass-bg); border-radius: var(--radius-md) var(--radius-md) 0 0; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <div class="panel-title">Client Practice Directory</div>
+              <div class="text-xs text-muted">Manage corporate & SME client GSTIN profiles, active issues, and reconciliations</div>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="openAddClientModal()">+ Add New Client</button>
+          </div>
+          <div class="client-grid" id="clientGrid" style="margin-top: var(--sp-4);">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- ==========================================
+             TAB: SETTINGS
+             ========================================== -->
+        <div class="tab-panel" id="tab-settings">
+          <div class="panel">
+            <div class="settings-layout">
+              <div class="settings-nav">
+                <div class="settings-nav-item active" onclick="switchSettingsSection('integrations', this)">Integrations & AI</div>
+                <div class="settings-nav-item" onclick="switchSettingsSection('profile', this)">Firm Profile</div>
+                <div class="settings-nav-item" onclick="switchSettingsSection('data', this)">Demo Data & Reset</div>
+              </div>
+              <div class="settings-content">
+                <!-- Integrations Section -->
+                <div class="settings-section" id="section-integrations">
+                  <h3 class="settings-section-title">AI Engine & External Connectors</h3>
+                  <p class="settings-section-desc">Manage connections to Google Gemini API, WhatsApp Cloud API, and GSTN Gateways.</p>
+                  
+                  <div class="connection-card" style="margin-bottom: var(--sp-4);">
+                    <div class="connection-icon" style="background: rgba(34,211,238,0.1); color: var(--accent-cyan)">⚡</div>
+                    <div class="connection-info">
+                      <div class="connection-name">Google Gemini AI Engine</div>
+                      <div class="connection-status-text">Model: gemini-1.5-flash (OCR, Explanations, Statutory ASMT-11 Drafting)</div>
+                    </div>
+                    <div class="badge badge-success">ACTIVE</div>
+                  </div>
+
+                  <div id="integrationsContainer">
+                    <!-- Populated dynamically by JS -->
+                  </div>
+                </div>
+
+                <!-- Firm Profile Section -->
+                <div class="settings-section" id="section-profile" style="display: none;">
+                  <h3 class="settings-section-title">Chartered Accountancy Practice Profile</h3>
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px;">
+                    <div>
+                      <label class="text-xs text-muted font-semibold">Firm Name</label>
+                      <input type="text" class="input" value="Kumar & Associates" readonly>
+                    </div>
+                    <div>
+                      <label class="text-xs text-muted font-semibold">Managing Partner</label>
+                      <input type="text" class="input" value="CA Rajesh Kumar, FCA" readonly>
+                    </div>
+                    <div>
+                      <label class="text-xs text-muted font-semibold">ICAI Firm Registration No (FRN)</label>
+                      <input type="text" class="input font-mono" value="105423W" readonly>
+                    </div>
+                    <div>
+                      <label class="text-xs text-muted font-semibold">Subscription Tier</label>
+                      <input type="text" class="input" value="CA Firm (Unlimited Clients)" readonly>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Demo Data Section -->
+                <div class="settings-section" id="section-data" style="display: none;">
+                  <h3 class="settings-section-title">Sample Practice Data Management</h3>
+                  <p class="settings-section-desc">Re-seed the database anytime with 12 authentic Indian CA clients, invoices, mismatches, notices, and compliance tasks.</p>
+                  <div style="margin-top: 20px;">
+                    <button class="btn btn-primary" id="btnReseedData" onclick="reseedDatabase()">
+                      🔄 Re-Seed Complete Sample Firm Data
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==========================================
+             TAB: AUDIT & ANALYTICS
+             ========================================== -->
+        <div class="tab-panel" id="tab-analytics">
+          <div class="panel-header" style="background: var(--glass-bg); border-radius: var(--radius-md) var(--radius-md) 0 0; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <div class="panel-title">Audit & Analytics Hub</div>
+              <div class="text-xs text-muted">Comprehensive statutory reports, ITC variance intelligence & vendor risk grading</div>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <button class="btn btn-secondary btn-sm" onclick="exportReport('excel')">📊 Export Excel</button>
+              <button class="btn btn-primary btn-sm" onclick="exportReport('pdf')">📄 Export Audit PDF</button>
+            </div>
+          </div>
+
+          <div class="metrics-grid" style="margin-top: var(--sp-4);">
+            <div class="metric-card">
+              <div class="metric-header">
+                <div class="metric-icon cyan">💰</div>
+                <div class="metric-trend up">↑ 98.4%</div>
+              </div>
+              <div class="metric-value font-mono" id="analyticsClaimed">₹34,85,000</div>
+              <div class="metric-label">Eligible ITC Availed</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-header">
+                <div class="metric-icon orange">⚠️</div>
+                <div class="metric-trend down">Blocked</div>
+              </div>
+              <div class="metric-value font-mono text-warning">₹1,20,000</div>
+              <div class="metric-label">Ineligible u/s 17(5)</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-header">
+                <div class="metric-icon green">⚡</div>
+                <div class="metric-trend up">Recovered</div>
+              </div>
+              <div class="metric-value font-mono text-success" id="analyticsRecovered">₹4,72,000</div>
+              <div class="metric-label">Saved via Auto-Chaser</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-header">
+                <div class="metric-icon red">⚖️</div>
+                <div class="metric-trend neutral">Contested</div>
+              </div>
+              <div class="metric-value font-mono text-danger" id="analyticsDemands">₹12,45,000</div>
+              <div class="metric-label">Disputed Notice Demands</div>
+            </div>
+          </div>
+
+          <div class="grid-2-1" style="display: grid; grid-template-columns: 2fr 1fr; gap: var(--sp-6); margin-top: var(--sp-6);">
+            <div class="panel">
+              <div class="panel-header">
+                <div class="panel-title">Month-on-Month ITC Claimed vs GSTR-2B Available</div>
+              </div>
+              <div class="chart-container" id="analyticsTrendChart" style="height: 220px; display: flex; align-items: flex-end; gap: 24px; padding-top: 20px;">
+                <!-- Populated by JS -->
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-header">
+                <div class="panel-title">Supplier Risk Distribution</div>
+              </div>
+              <div style="padding: var(--sp-4); display: flex; flex-direction: column; gap: 14px;">
+                <div>
+                  <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 4px;">
+                    <span style="color: var(--color-success)">Grade A: 100% Compliant</span>
+                    <span class="font-mono" id="gradeACount">14 vendors (82%)</span>
+                  </div>
+                  <div style="height: 8px; background: rgba(255,255,255,0.06); border-radius: 4px; overflow: hidden;">
+                    <div style="width: 82%; height: 100%; background: var(--color-success); border-radius: 4px;"></div>
+                  </div>
+                </div>
+                <div>
+                  <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 4px;">
+                    <span style="color: var(--color-warning)">Grade B: Minor Rate Mismatch</span>
+                    <span class="font-mono" id="gradeBCount">3 vendors (12%)</span>
+                  </div>
+                  <div style="height: 8px; background: rgba(255,255,255,0.06); border-radius: 4px; overflow: hidden;">
+                    <div style="width: 12%; height: 100%; background: var(--color-warning); border-radius: 4px;"></div>
+                  </div>
+                </div>
+                <div>
+                  <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 4px;">
+                    <span style="color: var(--color-danger)">Grade C: Unfiled / Missing in 2B</span>
+                    <span class="font-mono" id="gradeCCount">2 vendors (6%)</span>
+                  </div>
+                  <div style="height: 8px; background: rgba(255,255,255,0.06); border-radius: 4px; overflow: hidden;">
+                    <div style="width: 6%; height: 100%; background: var(--color-danger); border-radius: 4px;"></div>
+                  </div>
+                </div>
+                <button class="btn btn-secondary btn-sm w-full" style="margin-top: 10px;" onclick="switchTab('chaser')">
+                  ⚡ Auto-Chase High-Risk Vendors
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==========================================
+             TAB: COMPLIANCE CALENDAR
+             ========================================== -->
+        <div class="tab-panel" id="tab-calendar">
+          <div class="panel-header" style="background: var(--glass-bg); border-radius: var(--radius-md) var(--radius-md) 0 0; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <div class="panel-title">Statutory GST Compliance Calendar</div>
+              <div class="text-xs text-muted">Automated deadline tracking, late-fee protection & one-click client broadcast</div>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="broadcastDueReminders()">
+              💬 Broadcast WhatsApp Reminder to All Clients
+            </button>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: var(--sp-4); margin-top: var(--sp-4);" id="calendarCardsContainer">
+            <!-- Populated dynamically by JS from /api/v1/compliance/calendar/ -->
+          </div>
+        </div>
+
+        <!-- ==========================================
+             TAB: MY ASSIGNED TASKS (User View)
+             ========================================== -->
+        <div class="tab-panel" id="tab-my-tasks">
+          <div class="workdesk-hero">
+            <div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                <span class="badge badge-success" style="font-size: 11px;">👤 Personal Workdesk</span>
+                <span class="text-xs font-mono text-muted">Your assigned compliance tasks</span>
+              </div>
+              <h2>My Assigned Tasks</h2>
+              <p class="text-sm text-secondary">Track and manage tasks delegated to you by the admin.</p>
+            </div>
+            <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+              <div style="background: rgba(34,211,238,0.08); border: 1px solid rgba(34,211,238,0.25); border-radius: var(--radius-md); padding: 8px 16px; text-align: center;">
+                <div class="text-xs text-muted font-semibold">OPEN</div>
+                <div class="font-mono font-bold" id="myTasksOpenCount" style="color: var(--accent-cyan); font-size: 20px;">0</div>
+              </div>
+              <div style="background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.25); border-radius: var(--radius-md); padding: 8px 16px; text-align: center;">
+                <div class="text-xs text-muted font-semibold">IN PROGRESS</div>
+                <div class="font-mono font-bold text-warning" id="myTasksInProgressCount" style="font-size: 20px;">0</div>
+              </div>
+              <div style="background: rgba(52,211,153,0.08); border: 1px solid rgba(52,211,153,0.25); border-radius: var(--radius-md); padding: 8px 16px; text-align: center;">
+                <div class="text-xs text-muted font-semibold">COMPLETED</div>
+                <div class="font-mono font-bold text-success" id="myTasksCompletedCount" style="font-size: 20px;">0</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header" style="display: flex; justify-content: space-between; align-items: center;">
+              <div class="panel-title">Task Queue</div>
+              <select class="select" id="myTaskStatusFilter" style="width: 170px;" onchange="loadMyTasks()">
+                <option value="ALL">All Tasks</option>
+                <option value="OPEN">Open</option>
+                <option value="IN_PROGRESS">In Progress</option>
+                <option value="COMPLETED">Completed</option>
+              </select>
+            </div>
+            <div class="panel-body no-pad" id="myTasksContainer" style="max-height: calc(100vh - 340px); overflow-y: auto; padding: 16px;">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- ==========================================
+             TAB: TEAM COMMAND CENTER (Admin View)
+             ========================================== -->
+        <div class="tab-panel" id="tab-team">
+          <div class="welcome-banner" style="background: rgba(124,58,237,0.06); border-color: rgba(124,58,237,0.2);">
+            <div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                <span class="badge badge-warning" style="font-size: 11px; background: rgba(124,58,237,0.2); color: #a78bfa; border-color: rgba(124,58,237,0.4);">🛡️ Admin Panel</span>
+              </div>
+              <h2>Team Command Center</h2>
+              <p class="text-sm text-secondary">Monitor employee status, assign tasks, and manage workload across the firm.</p>
+            </div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <button class="btn btn-primary btn-sm" onclick="openAssignTaskModal()">📋 Assign New Task</button>
+              <button class="btn btn-secondary btn-sm" onclick="openAddEmployeeModal()">+ Add Employee</button>
+            </div>
+          </div>
+
+          <!-- Workload Metrics Strip -->
+          <div class="metrics-grid" id="teamMetricsGrid" style="margin-bottom: var(--sp-6);">
+            <div class="metric-card">
+              <div class="metric-header">
+                <div class="metric-icon green">👥</div>
+                <div class="metric-trend up">Active</div>
+              </div>
+              <div class="metric-value font-mono" id="teamTotalEmployees">0</div>
+              <div class="metric-label">Total Team Members</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-header">
+                <div class="metric-icon cyan">💼</div>
+                <div class="metric-trend up">Online</div>
+              </div>
+              <div class="metric-value font-mono" id="teamCurrentlyWorking" style="color: var(--color-success)">0</div>
+              <div class="metric-label">Currently Working</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-header">
+                <div class="metric-icon yellow">📝</div>
+                <div class="metric-trend neutral">Active</div>
+              </div>
+              <div class="metric-value font-mono" id="teamOpenTasks" style="color: var(--color-warning)">0</div>
+              <div class="metric-label">Open Tasks</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-header">
+                <div class="metric-icon green">✅</div>
+                <div class="metric-trend up">Done</div>
+              </div>
+              <div class="metric-value font-mono" id="teamCompletedTasks" style="color: var(--color-success)">0</div>
+              <div class="metric-label">Completed Tasks</div>
+            </div>
+          </div>
+
+          <!-- Employee Grid -->
+          <div class="panel">
+            <div class="panel-header" style="display: flex; justify-content: space-between; align-items: center;">
+              <div class="panel-title">Team Members</div>
+              <select class="select" id="teamStatusFilter" style="width: 170px;" onchange="loadTeamData()">
+                <option value="ALL">All Employees</option>
+                <option value="WORKING">Working</option>
+                <option value="IN_REVIEW">In Review</option>
+                <option value="ON_LEAVE">On Leave</option>
+                <option value="IDLE">Idle</option>
+              </select>
+            </div>
+            <div class="panel-body no-pad overflow-auto" style="max-height: calc(100vh - 440px);">
+              <table class="data-table" id="teamTable">
+                <thead>
+                  <tr>
+                    <th>Employee</th>
+                    <th>Designation</th>
+                    <th>Work Status</th>
+                    <th style="text-align: center">Active Tasks</th>
+                    <th style="text-align: center">Completed</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="teamTableBody">
+                  <!-- Populated by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Assign Task Modal -->
+  <div class="drawer-overlay" id="assignTaskModalOverlay" onclick="closeAssignTaskModal()"></div>
+  <div class="modal" id="assignTaskModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 560px; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-lg); box-shadow: 0 25px 60px rgba(0,0,0,0.6); z-index: 10000; padding: var(--sp-6);">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--sp-4);">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 24px;">📋</span>
+        <div>
+          <h3 class="font-bold">Assign Task to Team Member</h3>
+          <p class="text-xs text-muted">Delegate compliance work to an employee</p>
+        </div>
+      </div>
+      <button class="drawer-close" onclick="closeAssignTaskModal()">✕</button>
+    </div>
+    <form id="assignTaskForm" onsubmit="handleAssignTaskSubmit(event)">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+        <div style="grid-column: span 2;">
+          <label class="text-xs text-muted font-semibold">Task Title *</label>
+          <input type="text" class="input" id="assignTaskTitle" placeholder="e.g. Reconcile GSTR-2B for Zenith Tech" required>
+        </div>
+        <div style="grid-column: span 2;">
+          <label class="text-xs text-muted font-semibold">Description</label>
+          <textarea class="input" id="assignTaskDesc" style="height: 60px;" placeholder="Detailed instructions for the team member..."></textarea>
+        </div>
+        <div>
+          <label class="text-xs text-muted font-semibold">Assign To *</label>
+          <select class="select" id="assignTaskEmployee" required style="width: 100%;">
+            <!-- Populated by JS -->
+          </select>
+        </div>
+        <div>
+          <label class="text-xs text-muted font-semibold">Client (Optional)</label>
+          <select class="select" id="assignTaskClient" style="width: 100%;">
+            <option value="">— None —</option>
+            <!-- Populated by JS -->
+          </select>
+        </div>
+        <div>
+          <label class="text-xs text-muted font-semibold">Priority</label>
+          <select class="select" id="assignTaskPriority" style="width: 100%;">
+            <option value="LOW">Low</option>
+            <option value="MEDIUM" selected>Medium</option>
+            <option value="HIGH">High</option>
+            <option value="URGENT">Urgent</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-xs text-muted font-semibold">Due Date</label>
+          <input type="date" class="input" id="assignTaskDueDate">
+        </div>
+      </div>
+      <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: var(--sp-6);">
+        <button type="button" class="btn btn-secondary btn-sm" onclick="closeAssignTaskModal()">Cancel</button>
+        <button type="submit" class="btn btn-primary btn-sm" id="btnAssignTask">Assign Task →</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Add Employee Modal -->
+  <div class="drawer-overlay" id="addEmployeeModalOverlay" onclick="closeAddEmployeeModal()"></div>
+  <div class="modal" id="addEmployeeModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 520px; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-lg); box-shadow: 0 25px 60px rgba(0,0,0,0.6); z-index: 10000; padding: var(--sp-6);">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--sp-4);">
+      <h3 class="font-bold">Add New Team Member</h3>
+      <button class="drawer-close" onclick="closeAddEmployeeModal()">✕</button>
+    </div>
+    <form id="addEmployeeForm" onsubmit="handleAddEmployeeSubmit(event)">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+        <div>
+          <label class="text-xs text-muted font-semibold">First Name *</label>
+          <input type="text" class="input" id="newEmpFirstName" placeholder="Priya" required>
+        </div>
+        <div>
+          <label class="text-xs text-muted font-semibold">Last Name *</label>
+          <input type="text" class="input" id="newEmpLastName" placeholder="Sharma" required>
+        </div>
+        <div style="grid-column: span 2;">
+          <label class="text-xs text-muted font-semibold">Email *</label>
+          <input type="email" class="input" id="newEmpEmail" placeholder="priya.sharma@kumar.in" required>
+        </div>
+        <div>
+          <label class="text-xs text-muted font-semibold">Phone</label>
+          <input type="text" class="input" id="newEmpPhone" placeholder="+91 98200 55555">
+        </div>
+        <div>
+          <label class="text-xs text-muted font-semibold">Designation</label>
+          <select class="select" id="newEmpDesignation" style="width: 100%;">
+            <option value="Staff Accountant">Staff Accountant</option>
+            <option value="Senior Accountant">Senior Accountant</option>
+            <option value="Article Clerk">Article Clerk</option>
+            <option value="Audit Manager">Audit Manager</option>
+            <option value="Tax Analyst">Tax Analyst</option>
+            <option value="GST Compliance Officer">GST Compliance Officer</option>
+          </select>
+        </div>
+      </div>
+      <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: var(--sp-6);">
+        <button type="button" class="btn btn-secondary btn-sm" onclick="closeAddEmployeeModal()">Cancel</button>
+        <button type="submit" class="btn btn-primary btn-sm" id="btnSaveEmployee">Add to Team →</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- ==========================================
+       MODALS & DRAWERS
+       ========================================== -->
+
+  <!-- ITC Mismatch Detail Drawer -->
+  <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+  <div class="drawer" id="itcDrawer">
+    <div class="drawer-header">
+      <div>
+        <h3 class="font-bold" id="drawerTitle">Mismatch Details</h3>
+        <div class="text-xs text-muted" id="drawerSubtitle">INV-99283 • Tata Motors</div>
+      </div>
+      <button class="drawer-close" onclick="closeDrawer()">✕</button>
+    </div>
+    <div class="drawer-body" id="drawerBody">
+      <!-- Injected dynamically by JS -->
+    </div>
+  </div>
+
+  <!-- Client Profile Drawer -->
+  <div class="drawer-overlay" id="clientDrawerOverlay" onclick="closeClientDrawer()"></div>
+  <div class="drawer" id="clientProfileDrawer">
+    <div class="drawer-header">
+      <div>
+        <h3 class="font-bold" id="clientDrawerTitle">Client Profile</h3>
+        <div class="text-xs text-muted" id="clientDrawerSubtitle">GSTIN & Practice Summary</div>
+      </div>
+      <button class="drawer-close" onclick="closeClientDrawer()">✕</button>
+    </div>
+    <div class="drawer-body" id="clientDrawerBody">
+      <!-- Injected dynamically by JS -->
+    </div>
+  </div>
+
+  <!-- Add Client Modal -->
+  <div class="drawer-overlay" id="addClientModalOverlay" onclick="closeAddClientModal()"></div>
+  <div class="modal" id="addClientModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 540px; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-lg); box-shadow: 0 25px 60px rgba(0,0,0,0.6); z-index: 10000; padding: var(--sp-6);">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--sp-4);">
+      <h3 class="font-bold">Add New Practice Client</h3>
+      <button class="drawer-close" onclick="closeAddClientModal()">✕</button>
+    </div>
+    <form id="addClientForm" onsubmit="handleAddClientSubmit(event)">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+        <div style="grid-column: span 2;">
+          <label class="text-xs text-muted font-semibold">Trade / Business Name *</label>
+          <input type="text" class="input" id="newClientTradeName" placeholder="e.g. Acme Enterprises" required>
+        </div>
+        <div style="grid-column: span 2;">
+          <label class="text-xs text-muted font-semibold">Legal Registered Name</label>
+          <input type="text" class="input" id="newClientLegalName" placeholder="e.g. Acme Private Limited">
+        </div>
+        <div>
+          <label class="text-xs text-muted font-semibold">GSTIN *</label>
+          <input type="text" class="input font-mono" id="newClientGstin" placeholder="27AAACA1234A1Z5" maxlength="15" required style="text-transform: uppercase;">
+        </div>
+        <div>
+          <label class="text-xs text-muted font-semibold">PAN</label>
+          <input type="text" class="input font-mono" id="newClientPan" placeholder="AAACA1234A" maxlength="10" style="text-transform: uppercase;">
+        </div>
+        <div>
+          <label class="text-xs text-muted font-semibold">WhatsApp / Phone *</label>
+          <input type="text" class="input" id="newClientPhone" placeholder="+91 98200 12345" required>
+        </div>
+        <div>
+          <label class="text-xs text-muted font-semibold">Email</label>
+          <input type="email" class="input" id="newClientEmail" placeholder="gst@acme.in">
+        </div>
+        <div style="grid-column: span 2;">
+          <label class="text-xs text-muted font-semibold">Registered Address</label>
+          <input type="text" class="input" id="newClientAddress" placeholder="Mumbai, Maharashtra">
+        </div>
+      </div>
+      <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: var(--sp-6);">
+        <button type="button" class="btn btn-secondary btn-sm" onclick="closeAddClientModal()">Cancel</button>
+        <button type="submit" class="btn btn-primary btn-sm" id="btnSaveClient">Create Client Record</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Vendor Chaser Modal / Composer -->
+  <div class="drawer-overlay" id="chaserModalOverlay" onclick="closeChaserModal()"></div>
+  <div class="modal" id="chaserModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 600px; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-lg); box-shadow: 0 25px 60px rgba(0,0,0,0.6); z-index: 10000; padding: var(--sp-6);">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--sp-4);">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 24px;">⚡</span>
+        <div>
+          <h3 class="font-bold">Vendor Chaser Composer</h3>
+          <p class="text-xs text-muted" id="chaserModalSubtitle">AI-drafted statutory GST follow-up</p>
+        </div>
+      </div>
+      <button class="drawer-close" onclick="closeChaserModal()">✕</button>
+    </div>
+    
+    <div style="margin-bottom: 12px;">
+      <label class="text-xs text-muted font-semibold">Subject / Reference</label>
+      <input type="text" class="input font-semibold" id="chaserSubject" style="margin-top: 4px;">
+    </div>
+    
+    <div style="margin-bottom: 16px;">
+      <label class="text-xs text-muted font-semibold">Communication Body (Customizable)</label>
+      <textarea id="chaserMessageBody" class="input" style="height: 180px; font-family: inherit; font-size: 13px; line-height: 1.5; margin-top: 4px;" spellcheck="false"></textarea>
+    </div>
+
+    <div style="display: flex; gap: 8px; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+      <div style="display: flex; gap: 8px;">
+        <button class="btn btn-secondary btn-sm" onclick="copyChaserMessage()">📋 Copy Text</button>
+        <button class="btn btn-secondary btn-sm" onclick="openWhatsAppWebLink()">💬 Open in WhatsApp</button>
+      </div>
+      <div style="display: flex; gap: 8px;">
+        <button class="btn btn-primary btn-sm" id="btnDispatchChaser" onclick="dispatchChaserAction()">Mark as Dispatched ✓</button>
+      </div>
+    </div>
+
+    <div style="border-top: 1px solid var(--border-color); margin-top: 16px; padding-top: 12px; display: flex; justify-content: space-between; align-items: center;">
+      <span class="text-xs text-muted">Vendor responded or corrected return?</span>
+      <button class="btn btn-secondary btn-sm" style="color: var(--color-success); border-color: var(--color-success);" onclick="recordVendorResolvedAction()">
+        ✅ Record Response & Recover ITC
+      </button>
+    </div>
+  </div>
+
+  <!-- Create Legal Notice Modal -->
+  <div class="drawer-overlay" id="createNoticeModalOverlay" onclick="closeCreateNoticeModal()"></div>
+  <div class="modal" id="createNoticeModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 540px; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-lg); box-shadow: 0 25px 60px rgba(0,0,0,0.6); z-index: 10000; padding: var(--sp-6);">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--sp-4);">
+      <h3 class="font-bold">Log Statutory GST Notice</h3>
+      <button class="drawer-close" onclick="closeCreateNoticeModal()">✕</button>
+    </div>
+    <form id="createNoticeForm" onsubmit="handleCreateNoticeSubmit(event)">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+        <div style="grid-column: span 2;">
+          <label class="text-xs text-muted font-semibold">Client *</label>
+          <select class="select" id="newNoticeClientSelect" required style="width: 100%;">
+            <!-- Populated by JS -->
+          </select>
+        </div>
+        <div>
+          <label class="text-xs text-muted font-semibold">Notice Type *</label>
+          <select class="select" id="newNoticeType" style="width: 100%;">
+            <option value="ASMT-10">ASMT-10 (Scrutiny Notice)</option>
+            <option value="DRC-01">DRC-01 (Show Cause Notice)</option>
+            <option value="DRC-01A">DRC-01A (Pre-SCN Intimation)</option>
+            <option value="ADT-01">ADT-01 (Department Audit)</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-xs text-muted font-semibold">Notice Reference / ARN *</label>
+          <input type="text" class="input font-mono" id="newNoticeRef" placeholder="ZA2705260123456" required>
+        </div>
+        <div>
+          <label class="text-xs text-muted font-semibold">Issue Date *</label>
+          <input type="date" class="input" id="newNoticeIssueDate" required>
+        </div>
+        <div>
+          <label class="text-xs text-muted font-semibold">Reply Deadline *</label>
+          <input type="date" class="input" id="newNoticeDeadline" required>
+        </div>
+        <div style="grid-column: span 2;">
+          <label class="text-xs text-muted font-semibold">Disputed Tax Demand (₹) *</label>
+          <input type="number" step="0.01" class="input font-mono" id="newNoticeDemand" placeholder="225000.00" required>
+        </div>
+        <div style="grid-column: span 2;">
+          <label class="text-xs text-muted font-semibold">Notice Text / Summary of Allegation</label>
+          <textarea class="input" id="newNoticeContext" style="height: 70px;" placeholder="Discrepancy detected between GSTR-3B claimed ITC and GSTR-2B..."></textarea>
+        </div>
+      </div>
+      <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: var(--sp-6);">
+        <button type="button" class="btn btn-secondary btn-sm" onclick="closeCreateNoticeModal()">Cancel</button>
+        <button type="submit" class="btn btn-primary btn-sm">Save & Draft ASMT-11 with Gemini →</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- AI Gemini OCR Upload Modal -->
+  <div class="drawer-overlay" id="uploadModalOverlay" onclick="closeUploadModal()"></div>
+  <div class="modal" id="uploadModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 600px; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-lg); box-shadow: 0 25px 60px rgba(0,0,0,0.6); z-index: 10000; padding: var(--sp-6);">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--sp-4);">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 24px;">⚡</span>
+        <div>
+          <h3 class="font-bold">Google Gemini AI Invoice OCR</h3>
+          <p class="text-xs text-muted">Vision extraction, GSTIN validation & mathematical audit</p>
+        </div>
+      </div>
+      <button class="drawer-close" onclick="closeUploadModal()">✕</button>
+    </div>
+
+    <!-- Dropzone -->
+    <div id="dropZone" style="border: 2px dashed var(--border-color); border-radius: var(--radius-md); padding: 32px 20px; text-align: center; cursor: pointer; transition: all 0.2s ease; background: rgba(255,255,255,0.02);" onclick="document.getElementById('fileInput').click()">
+      <input type="file" id="fileInput" accept="image/*,.pdf" style="display: none;" onchange="handleFileSelected(event)">
+      <div style="font-size: 36px; margin-bottom: 8px;">📄</div>
+      <div class="font-semibold text-sm">Drag & drop tax invoice, or <span class="text-gradient">browse file</span></div>
+      <div class="text-xs text-muted mt-1">Supports PDF, PNG, JPG, WEBP B2B Tax Invoices</div>
+    </div>
+
+    <!-- Extraction Result with Human Review Form -->
+    <div id="extractionResult" style="display: none; margin-top: var(--sp-4); background: rgba(0,212,255,0.05); border: 1px solid rgba(0,212,255,0.2); border-radius: var(--radius-md); padding: var(--sp-4);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <span class="badge badge-success" id="ocrConfidenceBadge">✓ Extracted by Gemini (98% Confidence)</span>
+        <span class="text-xs font-mono text-muted" id="extractedEngine">Engine: Gemini Pro Vision</span>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 13px;">
+        <div>
+          <label class="text-xs text-muted">Invoice Number</label>
+          <input type="text" class="input font-mono" id="resInvNumInput">
+        </div>
+        <div>
+          <label class="text-xs text-muted">Invoice Date</label>
+          <input type="date" class="input" id="resInvDateInput">
+        </div>
+        <div>
+          <label class="text-xs text-muted">Vendor Name</label>
+          <input type="text" class="input" id="resVendorInput">
+        </div>
+        <div>
+          <label class="text-xs text-muted">Vendor GSTIN</label>
+          <input type="text" class="input font-mono" id="resGstinInput" maxlength="15">
+        </div>
+        <div>
+          <label class="text-xs text-muted">Taxable Value (₹)</label>
+          <input type="number" step="0.01" class="input font-mono" id="resTaxableInput">
+        </div>
+        <div>
+          <label class="text-xs text-muted">Total Amount (₹)</label>
+          <input type="number" step="0.01" class="input font-mono" id="resTotalInput">
+        </div>
+      </div>
+
+      <div id="ocrAnomalyAlert" style="display: none; margin-top: 10px; padding: 8px 12px; background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.3); border-radius: var(--radius-sm); font-size: 12px; color: var(--color-danger);">
+        ⚠️ <strong id="ocrAnomalyText">Anomaly detected</strong>
+      </div>
+    </div>
+
+    <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: var(--sp-6);">
+      <button class="btn btn-secondary btn-sm" onclick="closeUploadModal()">Cancel</button>
+      <button class="btn btn-secondary btn-sm" id="btnRejectOcr" onclick="rejectOcrExtraction()" style="display: none; color: var(--color-danger);">
+        Reject
+      </button>
+      <button class="btn btn-primary btn-sm" id="btnConfirmLedger" onclick="confirmAddToLedger()" style="display: none;">
+        ✓ Approve & Add to Purchase Register →
+      </button>
+    </div>
+  </div>
+
+  <!-- Live Activity Feed Modal -->
+  <div class="drawer-overlay" id="activityModalOverlay" onclick="closeActivityModal()"></div>
+  <div class="modal" id="activityModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 560px; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-lg); box-shadow: 0 25px 60px rgba(0,0,0,0.6); z-index: 10000; padding: var(--sp-6);">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--sp-4);">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 20px;">🔔</span>
+        <h3 class="font-bold">Firm Audit Trail & Live Events</h3>
+      </div>
+      <button class="drawer-close" onclick="closeActivityModal()">✕</button>
+    </div>
+    <div class="activity-feed" id="fullActivityFeedContainer" style="max-height: 400px; overflow-y: auto;">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

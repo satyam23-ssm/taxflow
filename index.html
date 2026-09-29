@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TaxFlow AI — Your Tax Practice, on Autopilot</title>
+  <meta name="description" content="TaxFlow AI is India's first autonomous Tax Operating System. Zero-entry WhatsApp ingestion, proactive ITC interception, and AI-powered legal notice response — built for CAs, CA firms, and enterprise finance teams.">
+  <link rel="stylesheet" href="css/design-system.css">
+  <link rel="stylesheet" href="css/landing.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect rx='20' width='100' height='100' fill='url(%23g)'/><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop stop-color='%2300d4ff'/><stop offset='1' stop-color='%237c3aed'/></linearGradient></defs><text x='50' y='68' font-size='50' font-weight='900' text-anchor='middle' fill='%23060a14'>T</text></svg>">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "TaxFlow AI",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web, Cloud",
+    "description": "Autonomous Tax Operating System for Indian Chartered Accountants, automated ITC reconciliation, WhatsApp invoice ingestion, and AI legal notice drafting.",
+    "offers": {
+      "@type": "Offer",
+      "price": "4999",
+      "priceCurrency": "INR"
+    }
+  }
+  </script>
+</head>
+<body>
+  <!-- Background Effects -->
+  <div class="bg-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+  <div class="bg-grid"></div>
+
+  <!-- ─── Navbar ─────────────────────── -->
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <a href="/" class="navbar-logo">
+        <div class="logo-icon">T</div>
+        <span>TaxFlow <span class="text-gradient">AI</span></span>
+      </a>
+      <div class="navbar-links" id="navLinks">
+        <a href="#features">Features</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#calculator">ROI Calculator</a>
+        <a href="#pricing">Pricing</a>
+      </div>
+      <div class="navbar-actions">
+        <a href="login.html" class="btn btn-ghost">Login</a>
+        <a href="login.html" class="btn btn-primary">Start Free Trial</a>
+      </div>
+      <div class="navbar-mobile-toggle" id="mobileToggle" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Close menu">✕</button>
+    <a href="#features" onclick="closeMobileMenu()">Features</a>
+    <a href="#how-it-works" onclick="closeMobileMenu()">How It Works</a>
+    <a href="#calculator" onclick="closeMobileMenu()">ROI Calculator</a>
+    <a href="#pricing" onclick="closeMobileMenu()">Pricing</a>
+    <a href="login.html" class="btn btn-primary btn-lg">Start Free Trial</a>
+  </div>
+
+  <!-- ─── Hero ───────────────────────── -->
+  <section class="hero" id="hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-text">
+          <div class="hero-badge">
+            <span class="pulse"></span>
+            India's First Tax Operating System
+          </div>
+          <h1>
+            <span class="line">Your Tax Practice,</span>
+            <span class="line text-gradient">on Autopilot.</span>
+          </h1>
+          <p class="hero-subtitle">
+            Stop running your CA practice on WhatsApp + Excel. TaxFlow AI turns blurry invoice photos into structured ledger entries, catches ITC leakage before deadlines, and auto-drafts legal notice responses.
+          </p>
+          <div class="hero-actions">
+            <a href="login.html" class="btn btn-primary btn-lg">Start Free Trial →</a>
+            <a href="#features" class="btn btn-secondary btn-lg">See How It Works</a>
+          </div>
+          <div class="hero-stats">
+            <div class="hero-stat">
+              <div class="hero-stat-value" data-count="47">₹47L+</div>
+              <div class="hero-stat-label">ITC Recovered (Beta)</div>
+            </div>
+            <div class="hero-stat">
+              <div class="hero-stat-value" data-count="12000">12,000+</div>
+              <div class="hero-stat-label">Invoices Processed</div>
+            </div>
+            <div class="hero-stat">
+              <div class="hero-stat-value" data-count="98">98%</div>
+              <div class="hero-stat-label">OCR Accuracy</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Floating Dashboard Preview -->
+        <div class="hero-visual">
+          <div class="hero-dashboard">
+            <div class="hero-dashboard-header">
+              <div class="hero-dashboard-dots">
+                <span></span><span></span><span></span>
+              </div>
+              <span class="hero-dashboard-title">TaxFlow Dashboard — June 2026</span>
+            </div>
+            <div class="hero-dashboard-body">
+              <div class="hero-mini-card">
+                <div class="hero-mini-card-label">Total Clients</div>
+                <div class="hero-mini-card-value info">142</div>
+              </div>
+              <div class="hero-mini-card">
+                <div class="hero-mini-card-label">ITC at Risk</div>
+                <div class="hero-mini-card-value danger">₹8.4L</div>
+              </div>
+              <div class="hero-mini-card">
+                <div class="hero-mini-card-label">ITC Recovered</div>
+                <div class="hero-mini-card-value success">₹47.2L</div>
+              </div>
+              <div class="hero-mini-chart" id="heroChart"></div>
+            </div>
+          </div>
+          <!-- Floating cards -->
+          <div class="hero-float-card card-1">
+            <div class="hero-float-icon success-bg">✓</div>
+            <div>
+              <div class="hero-float-text-label">Vendor Chaser</div>
+              <div class="hero-float-text-value" style="color: var(--color-success)">₹3.2L Recovered</div>
+            </div>
+          </div>
+          <div class="hero-float-card card-2">
+            <div class="hero-float-icon warning-bg">⚡</div>
+            <div>
+              <div class="hero-float-text-label">Invoice Extracted</div>
+              <div class="hero-float-text-value">GSTIN Auto-Matched</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Trust Bar ──────────────────── -->
+  <section class="trust-bar reveal" id="trust-bar">
+    <div class="container">
+      <p class="trust-bar-label">Trusted by forward-thinking CA practices across India</p>
+      <div class="trust-logos">
+        <span class="trust-logo">Sharma & Associates</span>
+        <span class="trust-logo">PKF Sridhar</span>
+        <span class="trust-logo">Agarwal CA Firm</span>
+        <span class="trust-logo">NexGen Finance</span>
+        <span class="trust-logo">TaxPro India</span>
+        <span class="trust-logo">VK Consultants</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Features (3 USPs) ──────────── -->
+  <section class="section" id="features">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-overline">Core Features</span>
+        <h2 class="section-title">Three Superpowers Your <span class="text-gradient">Competitors Don't Have</span></h2>
+        <p class="section-subtitle">Every feature is designed to reduce CA keystrokes, not add them. Your clients still use WhatsApp. Your team still uses Tally. TaxFlow AI works silently in between.</p>
+      </div>
+      <div class="features-grid">
+        <!-- Feature 1: WhatsApp Ingestion -->
+        <div class="feature-card reveal delay-1">
+          <div class="feature-icon whatsapp">💬</div>
+          <h3>Zero-Entry WhatsApp Ingestion</h3>
+          <p>Clients dump blurry invoice photos on WhatsApp. Our Tax-Vision AI pipeline extracts vendor GSTIN, invoice number, taxable value, and CGST/SGST/IGST splits into structured ledger-ready JSON. Automatically. Zero human data entry.</p>
+          <div style="display: flex; gap: var(--sp-2); flex-wrap: wrap;">
+            <span class="feature-tag">Meta Cloud API Direct</span>
+            <span class="feature-tag">₹0.11/msg Cost</span>
+            <span class="feature-tag">98% OCR Accuracy</span>
+          </div>
+        </div>
+        <!-- Feature 2: ITC Interception -->
+        <div class="feature-card reveal delay-2">
+          <div class="feature-icon itc">🛡️</div>
+          <h3>Proactive ITC Interception</h3>
+          <p>Cross-references your books against live GSTR-2B data via GSP gateways. When a vendor omission is detected before the filing deadline, an automated Vendor Chaser fires WhatsApp + email reminders. Turn ITC loss from passive regret into an actively prevented event.</p>
+          <div style="display: flex; gap: var(--sp-2); flex-wrap: wrap;">
+            <span class="feature-tag">₹10L–₹1Cr+ Saved/Year</span>
+            <span class="feature-tag">Auto Vendor Chaser</span>
+            <span class="feature-tag">Real-time 2B Sync</span>
+          </div>
+        </div>
+        <!-- Feature 3: Legal Notice AI -->
+        <div class="feature-card reveal delay-3">
+          <div class="feature-icon legal">⚖️</div>
+          <h3>AI Legal Notice Command Center</h3>
+          <p>GST notices (ASMT-10, DRC-01) cause panic. Our AI extracts disputed amounts, cited sections, and deadlines — then auto-builds a ready-to-file ASMT-11 response with factual reconciliation tables. No CA starts from a blank page under pressure.</p>
+          <div style="display: flex; gap: var(--sp-2); flex-wrap: wrap;">
+            <span class="feature-tag">Auto ASMT-11 Draft</span>
+            <span class="feature-tag">Deadline Tracking</span>
+            <span class="feature-tag">Section Mapping</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── How It Works ───────────────── -->
+  <section class="section" id="how-it-works">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-overline">How It Works</span>
+        <h2 class="section-title">From Invoice to Filing <span class="text-gradient">in 4 Steps</span></h2>
+        <p class="section-subtitle">No migration. No training sessions. Your existing workflow stays — TaxFlow just makes it 10× faster.</p>
+      </div>
+      <div class="steps-flow">
+        <div class="step-card reveal delay-1">
+          <div class="step-icon">🔗</div>
+          <div class="step-number"><span>1</span></div>
+          <h4>Connect Tally</h4>
+          <p>Install the TaxFlow desktop agent. It connects outbound to our cloud via WebSocket — zero firewall config, no IT team needed.</p>
+        </div>
+        <div class="step-card reveal delay-2">
+          <div class="step-icon">📱</div>
+          <div class="step-number"><span>2</span></div>
+          <h4>Clients Send Invoices</h4>
+          <p>Your clients keep sending invoice photos via WhatsApp. Business as usual — except now our AI reads every one.</p>
+        </div>
+        <div class="step-card reveal delay-3">
+          <div class="step-icon">🤖</div>
+          <div class="step-number"><span>3</span></div>
+          <h4>AI Reconciles</h4>
+          <p>TaxFlow matches extracted invoices against GSTR-2B data. Mismatches trigger automatic vendor chasing.</p>
+        </div>
+        <div class="step-card reveal delay-4">
+          <div class="step-icon">✅</div>
+          <div class="step-number"><span>4</span></div>
+          <h4>File with One Click</h4>
+          <p>Review the AI-prepared reconciliation, approve, and file. What took 3 days now takes 30 minutes.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── ITC Calculator ────────────── -->
+  <section class="section" id="calculator">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-overline">ROI Calculator</span>
+        <h2 class="section-title">How Much ITC Are <span class="text-gradient">You Losing?</span></h2>
+        <p class="section-subtitle">Most CA firms don't know how much ITC they're leaving on the table. Slide to find out.</p>
+      </div>
+      <div class="calculator-section reveal">
+        <div class="calculator-body">
+          <div class="calculator-slider-group">
+            <div class="calculator-slider-label">
+              <span>Number of clients you manage</span>
+              <span class="calculator-slider-value" id="clientCount">50</span>
+            </div>
+            <input type="range" class="calculator-slider" id="clientSlider" min="10" max="500" value="50" step="10">
+          </div>
+          <div class="calculator-slider-group">
+            <div class="calculator-slider-label">
+              <span>Average monthly GST turnover per client</span>
+              <span class="calculator-slider-value" id="turnoverValue">₹25L</span>
+            </div>
+            <input type="range" class="calculator-slider" id="turnoverSlider" min="5" max="200" value="25" step="5">
+          </div>
+          <div class="calculator-result">
+            <div class="calculator-result-item">
+              <div class="calculator-result-value highlight" id="calcItcAtRisk">₹6.25L</div>
+              <div class="calculator-result-label">Annual ITC at Risk</div>
+            </div>
+            <div class="calculator-result-item">
+              <div class="calculator-result-value highlight" id="calcRecoverable">₹5.31L</div>
+              <div class="calculator-result-label">Recoverable with TaxFlow</div>
+            </div>
+            <div class="calculator-result-item">
+              <div class="calculator-result-value highlight" id="calcRoi">29×</div>
+              <div class="calculator-result-label">ROI on Subscription</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Pricing ────────────────────── -->
+  <section class="section" id="pricing">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-overline">Pricing</span>
+        <h2 class="section-title">India-Priced, <span class="text-gradient">Not US-Transplanted</span></h2>
+        <p class="section-subtitle">Pricing that makes sense for Indian CA practices. No hidden fees. No per-filing charges. Unlimited GSTR filings on every plan.</p>
+      </div>
+      <div class="pricing-toggle reveal">
+        <span class="pricing-toggle-label active" id="monthlyLabel">Monthly</span>
+        <div class="toggle active" id="pricingToggle"></div>
+        <span class="pricing-toggle-label" id="annualLabel">Annual</span>
+        <span class="pricing-save-badge">Save 20%</span>
+      </div>
+      <div class="pricing-grid">
+        <!-- Solo CA -->
+        <div class="pricing-card reveal delay-1">
+          <div class="pricing-card-header">
+            <div class="pricing-tier-icon" style="background: var(--accent-cyan-dim);">👤</div>
+            <div class="pricing-tier-name">Solo CA</div>
+            <div class="pricing-tier-desc">For individual practitioners</div>
+          </div>
+          <div class="pricing-price">
+            <span class="pricing-currency">₹</span>
+            <span class="pricing-amount" data-monthly="1499" data-annual="1199">1,499</span>
+            <span class="pricing-period">/month</span>
+          </div>
+          <div class="pricing-features">
+            <div class="pricing-feature"><span class="check">✓</span> 1 user seat</div>
+            <div class="pricing-feature"><span class="check">✓</span> 500 AI extractions/month</div>
+            <div class="pricing-feature"><span class="check">✓</span> Tally desktop agent</div>
+            <div class="pricing-feature"><span class="check">✓</span> WhatsApp ingestion link</div>
+            <div class="pricing-feature"><span class="check">✓</span> Basic ITC reconciliation</div>
+            <div class="pricing-feature"><span class="check">✓</span> Email support</div>
+          </div>
+          <a href="login.html" class="btn btn-secondary w-full">Start Free Trial</a>
+        </div>
+        <!-- CA Firm (Popular) -->
+        <div class="pricing-card popular reveal delay-2">
+          <div class="pricing-popular-tag">Most Popular</div>
+          <div class="pricing-card-header">
+            <div class="pricing-tier-icon" style="background: var(--accent-violet-dim);">🏢</div>
+            <div class="pricing-tier-name">CA Firm Suite</div>
+            <div class="pricing-tier-desc">For growing practices</div>
+          </div>
+          <div class="pricing-price">
+            <span class="pricing-currency">₹</span>
+            <span class="pricing-amount" data-monthly="4999" data-annual="3999">4,999</span>
+            <span class="pricing-period">/month + ₹750/seat</span>
+          </div>
+          <div class="pricing-features">
+            <div class="pricing-feature"><span class="check">✓</span> 5 seats included (+₹750/extra)</div>
+            <div class="pricing-feature"><span class="check">✓</span> 2,000 AI extractions/month</div>
+            <div class="pricing-feature"><span class="check">✓</span> Multi-Tally routing</div>
+            <div class="pricing-feature"><span class="check">✓</span> Vendor Chaser (auto)</div>
+            <div class="pricing-feature"><span class="check">✓</span> Team dashboards & RBAC</div>
+            <div class="pricing-feature"><span class="check">✓</span> Compliance audit logs</div>
+            <div class="pricing-feature"><span class="check">✓</span> Priority support</div>
+          </div>
+          <a href="login.html" class="btn btn-primary w-full">Start Free Trial</a>
+        </div>
+        <!-- Enterprise -->
+        <div class="pricing-card reveal delay-3">
+          <div class="pricing-card-header">
+            <div class="pricing-tier-icon" style="background: rgba(245,158,11,0.12);">🏛️</div>
+            <div class="pricing-tier-name">Enterprise</div>
+            <div class="pricing-tier-desc">For large organizations</div>
+          </div>
+          <div class="pricing-price">
+            <span class="pricing-currency">₹</span>
+            <span class="pricing-amount">25,000+</span>
+            <span class="pricing-period">/month custom</span>
+          </div>
+          <div class="pricing-features">
+            <div class="pricing-feature"><span class="check">✓</span> Unlimited seats</div>
+            <div class="pricing-feature"><span class="check">✓</span> Unlimited AI extractions</div>
+            <div class="pricing-feature"><span class="check">✓</span> ERP sync (SAP/Oracle/Zoho)</div>
+            <div class="pricing-feature"><span class="check">✓</span> Full Vendor Chaser suite</div>
+            <div class="pricing-feature"><span class="check">✓</span> AI Legal Notice responder</div>
+            <div class="pricing-feature"><span class="check">✓</span> Custom compliance rules</div>
+            <div class="pricing-feature"><span class="check">✓</span> Dedicated account manager</div>
+            <div class="pricing-feature"><span class="check">✓</span> SLA guarantee</div>
+          </div>
+          <a href="#" class="btn btn-secondary w-full" onclick="alert('Sales team will contact you within 24 hours!')">Contact Sales</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Testimonials ───────────────── -->
+  <section class="section" id="testimonials">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-overline">What CAs Say</span>
+        <h2 class="section-title">Built By CAs, <span class="text-gradient">For CAs</span></h2>
+      </div>
+      <div class="testimonials-grid">
+        <div class="testimonial-card reveal delay-1">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">"The Vendor Chaser alone recovered ₹12L in ITC for one of our manufacturing clients in the first quarter. That's more than 10× our annual subscription cost. This tool pays for itself on day one."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">RK</div>
+            <div>
+              <div class="testimonial-name">CA Rajesh Kumar</div>
+              <div class="testimonial-role">Partner, Kumar & Associates, Mumbai</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card reveal delay-2">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">"My articled clerks used to spend 4 hours per client just entering WhatsApp invoices into Tally. Now TaxFlow does it in seconds. We've tripled our client capacity without hiring."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">PS</div>
+            <div>
+              <div class="testimonial-name">CA Priya Sharma</div>
+              <div class="testimonial-role">Solo Practitioner, Delhi</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card reveal delay-3">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">"When we received a DRC-01 notice with ₹45L disputed, TaxFlow's AI had the ASMT-11 response drafted with reconciliation tables before I even finished reading the notice. Game changer."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">AM</div>
+            <div>
+              <div class="testimonial-name">CA Amit Mehta</div>
+              <div class="testimonial-role">Tax Head, Zenith Industries, Pune</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Trust & Security Badges ────────── -->
+  <section style="padding: var(--sp-12) 0; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); background: rgba(0,0,0,0.2);">
+    <div class="container">
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-around; align-items: center; gap: var(--sp-6); text-align: center;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 28px;">🛡️</span>
+          <div style="text-align: left;">
+            <div style="font-weight: 700; font-size: 14px;">SOC-2 Type II Certified</div>
+            <div style="font-size: 12px; color: var(--text-muted);">Enterprise Security Audited</div>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 28px;">🔒</span>
+          <div style="text-align: left;">
+            <div style="font-weight: 700; font-size: 14px;">256-bit AES Encryption</div>
+            <div style="font-size: 12px; color: var(--text-muted);">Bank-Grade Data Protection</div>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 28px;">🇮🇳</span>
+          <div style="text-align: left;">
+            <div style="font-weight: 700; font-size: 14px;">GSTN Sandbox Compliant</div>
+            <div style="font-size: 12px; color: var(--text-muted);">Govt API Gateway Architecture</div>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 28px;">⚡</span>
+          <div style="text-align: left;">
+            <div style="font-weight: 700; font-size: 14px;">99.99% Cloud Uptime</div>
+            <div style="font-size: 12px; color: var(--text-muted);">High Availability Infrastructure</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── FAQ Section ──────────────────── -->
+  <section class="faq-section" style="padding: var(--sp-20) 0;" id="faq">
+    <div class="container">
+      <div class="section-header text-center reveal">
+        <span class="section-badge">Frequently Asked Questions</span>
+        <h2 class="section-title">Got questions? We've got answers.</h2>
+        <p class="section-desc">Everything you need to know about TaxFlow AI for your chartered accountancy practice.</p>
+      </div>
+
+      <div style="max-width: 780px; margin: 0 auto; display: flex; flex-direction: column; gap: var(--sp-4);" class="reveal">
+        <details class="panel" style="cursor: pointer; padding: var(--sp-5);">
+          <summary style="font-weight: 700; font-size: 16px; outline: none; list-style: none; display: flex; justify-content: space-between; align-items: center;">
+            How does TaxFlow AI ingest WhatsApp invoices automatically?
+            <span style="color: var(--color-primary); font-size: 20px;">+</span>
+          </summary>
+          <p style="font-size: 14px; color: var(--text-secondary); margin-top: var(--sp-3); line-height: 1.6;">
+            We provide your CA firm with a dedicated WhatsApp Business Cloud API number. Your clients or their accountants simply click a photo or forward invoice PDFs. Our AI Vision engine immediately extracts the GSTIN, invoice number, dates, line items, and tax amounts, mapping it directly into your purchase ledger.
+          </p>
+        </details>
+
+        <details class="panel" style="cursor: pointer; padding: var(--sp-5);">
+          <summary style="font-weight: 700; font-size: 16px; outline: none; list-style: none; display: flex; justify-content: space-between; align-items: center;">
+            Does TaxFlow integrate directly with TallyPrime and Zoho Books?
+            <span style="color: var(--color-primary); font-size: 20px;">+</span>
+          </summary>
+          <p style="font-size: 14px; color: var(--text-secondary); margin-top: var(--sp-3); line-height: 1.6;">
+            Yes! TaxFlow features an automated bi-directional WebSocket bridge that syncs extracted purchase invoices directly into your local TallyPrime XML port (9000) or Zoho Books via REST APIs with zero manual data entry.
+          </p>
+        </details>
+
+        <details class="panel" style="cursor: pointer; padding: var(--sp-5);">
+          <summary style="font-weight: 700; font-size: 16px; outline: none; list-style: none; display: flex; justify-content: space-between; align-items: center;">
+            How legally valid are the AI-drafted ASMT-11 responses?
+            <span style="color: var(--color-primary); font-size: 20px;">+</span>
+          </summary>
+          <p style="font-size: 14px; color: var(--text-secondary); margin-top: var(--sp-3); line-height: 1.6;">
+            The legal engine is tuned on statutory GST jurisprudence, citing Section 16(2), Section 75(4) personal hearing rights, and landmark High Court precedents (like D.Y. Beathel Enterprises). Every draft is prepared for CA review and includes auto-generated reconciliation tables in Annexure-A before final submission.
+          </p>
+        </details>
+
+        <details class="panel" style="cursor: pointer; padding: var(--sp-5);">
+          <summary style="font-weight: 700; font-size: 16px; outline: none; list-style: none; display: flex; justify-content: space-between; align-items: center;">
+            Is client tax data secure and confidential?
+            <span style="color: var(--color-primary); font-size: 20px;">+</span>
+          </summary>
+          <p style="font-size: 14px; color: var(--text-secondary); margin-top: var(--sp-3); line-height: 1.6;">
+            Completely. All data in transit is encrypted using 256-bit TLS 1.3, and resting data resides in isolated PostgreSQL schemas per firm. We never train public AI models on your clients' proprietary financial records.
+          </p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Final CTA ──────────────────── -->
+  <section class="cta-section">
+    <div class="container reveal">
+      <h2>Stop Leaving Money on the Table.</h2>
+      <p>Join 200+ CA practices that have already recovered crores in missed ITC. Start your free 14-day trial — no credit card required.</p>
+      <div class="cta-actions">
+        <a href="login.html" class="btn btn-primary btn-lg">Start Free Trial →</a>
+        <a href="#calculator" class="btn btn-secondary btn-lg">Calculate Your Savings</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Footer ─────────────────────── -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-brand-logo">
+            <div class="logo-icon" style="width:30px;height:30px;background:var(--gradient-accent);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:var(--text-sm);color:var(--text-inverse);font-weight:900;">T</div>
+            TaxFlow AI
+          </div>
+          <p class="footer-brand-desc">India's first autonomous Tax Operating System. From invoice ingestion to compliance filing — one intelligent platform.</p>
+          <span class="footer-india">🇮🇳 Made in India</span>
+        </div>
+        <div>
+          <div class="footer-col-title">Product</div>
+          <div class="footer-links">
+            <a href="#features">Features</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#calculator">ROI Calculator</a>
+            <a href="dashboard.html">Dashboard Demo</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-col-title">Resources</div>
+          <div class="footer-links">
+            <a href="#">GST Filing Guide</a>
+            <a href="#">ITC Recovery Playbook</a>
+            <a href="#">API Documentation</a>
+            <a href="#">Changelog</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-col-title">Company</div>
+          <div class="footer-links">
+            <a href="#">About Us</a>
+            <a href="#">Blog</a>
+            <a href="#">Careers</a>
+            <a href="#">Contact</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 TaxFlow AI. All rights reserved.</span>
+        <div class="footer-socials">
+          <a href="#" aria-label="Twitter">𝕏</a>
+          <a href="#" aria-label="LinkedIn">in</a>
+          <a href="#" aria-label="YouTube">▶</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/landing.js"></script>
+</body>
+</html>
