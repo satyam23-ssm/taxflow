@@ -83,7 +83,10 @@ if js_dir.exists():
 def serve_html(filename: str):
     file_path = FRONTEND_DIR / filename
     if file_path.exists():
-        return FileResponse(str(file_path), media_type="text/html")
+        try:
+            return HTMLResponse(content=file_path.read_text(encoding="utf-8"), media_type="text/html")
+        except Exception:
+            return FileResponse(str(file_path), media_type="text/html")
     return HTMLResponse(content=f"<h1>File not found: {filename}</h1>", status_code=404)
 
 
@@ -92,16 +95,19 @@ async def home():
     return serve_html("index.html")
 
 
+@app.get("/index", include_in_schema=False)
 @app.get("/index.html", include_in_schema=False)
 async def index_page():
     return serve_html("index.html")
 
 
+@app.get("/login", include_in_schema=False)
 @app.get("/login.html", include_in_schema=False)
 async def login_page():
     return serve_html("login.html")
 
 
+@app.get("/dashboard", include_in_schema=False)
 @app.get("/dashboard.html", include_in_schema=False)
 async def dashboard_page():
     return serve_html("dashboard.html")

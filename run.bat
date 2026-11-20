@@ -26,6 +26,6 @@ echo [3/3] Starting the FastAPI Local Server...
 echo Opening TaxFlow AI at http://localhost:8000
 echo API Docs available at http://localhost:8000/docs
 echo.
-start "" "http://localhost:8000/login.html"
+start "" cmd /c "timeout /t 3 /nobreak >nul && start http://localhost:8000/login.html"
 python backend\run.py
 pause
