@@ -54,6 +54,12 @@ class Settings(BaseSettings):
     GSP_CLIENT_ID: str = ""
     GSP_CLIENT_SECRET: str = ""
 
+    # Supabase
+    SUPABASE_URL: str = ""
+    SUPABASE_KEY: str = ""
+    SUPABASE_SERVICE_ROLE_KEY: str = ""
+    SUPABASE_BUCKET: str = "taxflow-invoices"
+
     class Config:
         env_file = str(Path(__file__).resolve().parent.parent / ".env")
         case_sensitive = False

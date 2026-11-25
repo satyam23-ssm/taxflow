@@ -2,11 +2,11 @@
    TaxFlow AI — Production JWT Authentication
    ======================================== */
 
-const API_BASE = window.location.origin.includes(':8000') || window.location.port === '8000'
-  ? '' 
-  : (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
-    ? 'http://127.0.0.1:8000'
-    : '';
+const API_BASE = (typeof window !== 'undefined' && window.location)
+  ? ((window.location.origin && window.location.origin.includes(':8000')) || window.location.port === '8000'
+      ? '' 
+      : 'http://127.0.0.1:8000')
+  : 'http://127.0.0.1:8000';
 
 document.addEventListener('DOMContentLoaded', () => {
   const urlParams = new URLSearchParams(window.location.search);

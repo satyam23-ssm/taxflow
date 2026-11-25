@@ -10,7 +10,9 @@ echo [1/3] Checking status and staging files...
 git add .
 
 echo [2/3] Committing changes...
-git commit -m "Convert frontend to JS render engine, inline styles, and optimize architecture"
+set MSG=%~1
+if "%MSG%"=="" set MSG=Fix invoice OCR scanning, extraction and ledger integration
+git commit -m "%MSG%"
 
 echo [3/3] Pushing to GitHub (origin/main)...
 git push origin main

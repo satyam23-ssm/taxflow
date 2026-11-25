@@ -252,6 +252,9 @@
               <button class="btn btn-primary btn-sm" id="syncReconcileBtn" onclick="triggerGstr2bSync()">
                 🔄 Sync &amp; Reconcile GSTR-2B
               </button>
+              <button class="btn btn-secondary btn-sm" onclick="openUploadModal()" style="display: inline-flex; align-items: center; gap: 4px; font-weight: 600;">
+                <span>⚡</span> Scan &amp; Upload Invoice
+              </button>
               <div style="flex: 1;"></div>
               <div class="filter-chip active" data-filter="ALL" id="filterChipAll">All Invoices</div>
               <div class="filter-chip" data-filter="MISMATCHED" id="filterChipMismatch" style="color: var(--color-warning); border-color: var(--color-warning-border)">Mismatch</div>
@@ -944,11 +947,11 @@
       </div>
       <button class="drawer-close" onclick="closeUploadModal()">✕</button>
     </div>
-    <div id="dropZone" style="border: 2px dashed var(--border-color); border-radius: var(--radius-md); padding: 32px 20px; text-align: center; cursor: pointer; transition: all 0.2s ease; background: rgba(255,255,255,0.02);" onclick="document.getElementById('fileInput').click()">
-      <input type="file" id="fileInput" accept="image/*,.pdf" style="display: none;" onchange="handleFileSelected(event)">
+    <div id="dropZone" style="border: 2px dashed var(--border-color); border-radius: var(--radius-md); padding: 32px 20px; text-align: center; cursor: pointer; transition: all 0.2s ease; background: rgba(255,255,255,0.02);" onclick="document.getElementById('fileInput').click()" ondragover="event.preventDefault();" ondrop="event.preventDefault(); const f = event.dataTransfer?.files?.[0]; if (f) processInvoiceFile(f);">
+      <input type="file" id="fileInput" accept="image/*,.pdf,.png,.jpg,.jpeg,.webp" style="display: none;" onchange="handleFileSelected(event)">
       <div style="font-size: 36px; margin-bottom: 8px;">📄</div>
       <div class="font-semibold text-sm">Drag &amp; drop tax invoice, or <span class="text-gradient">browse file</span></div>
-      <div class="text-xs text-muted mt-1">Supports PDF, PNG, JPG, WEBP B2B Tax Invoices</div>
+      <div class="text-xs text-muted mt-1">Supports PDF, PNG, JPG, WEBP Indian B2B Tax Invoices</div>
     </div>
     <div id="extractionResult" style="display: none; margin-top: var(--sp-4); background: rgba(0,212,255,0.05); border: 1px solid rgba(0,212,255,0.2); border-radius: var(--radius-md); padding: var(--sp-4);">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">

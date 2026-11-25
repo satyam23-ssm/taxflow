@@ -2,7 +2,16 @@ from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sess
 from sqlalchemy.orm import DeclarativeBase
 from .config import settings
 
-engine = create_async_engine(settings.DATABASE_URL, echo=settings.DEBUG)
+db_url = settings.DATABASE_URL.strip()
+if db_url.startswith("postgres://"):
+    db_url = db_url.replace("postgres://", "postgresql+asyncpg://", 1)
+elif db_url.startswith("postgresql://"):
+    db_url = db_url.replace("postgresql://", "postgresql+asyncpg://", 1)
+
+# Supabase Transaction Pooler (PgBouncer port 6543) requires statement_cache_size=0
+connect_args = {"statement_cache_size": 0} if "asyncpg" in db_url else {}
+
+engine = create_async_engine(db_url, echo=settings.DEBUG, connect_args=connect_args)
 async_session = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
 
